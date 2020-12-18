@@ -313,9 +313,14 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
     # Create a user defined footnote
     if(!is.null(note) && save == TRUE) {      
       apa.note = officer::fpar( 
-        ftext("Note. ", prop=fp_text(font.family = "Times", font.size = 12, italic=T)), 
-        ftext(note, prop=fp_text(font.family = "Times", font.size = 12)) 
+        officer::ftext("Note. ", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
+        officer::ftext(note, prop=officer::fp_text(font.family = "Times", font.size = 12)) 
       )
+      
+      # Deprecated
+      #apa.note = ReporteRs::pot("Note. ", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
+      #  ReporteRs::pot(note, ReporteRs::textProperties(font.family = "Times", font.size = 12))
+
     } else {
       apa.note = ""
     }
@@ -342,15 +347,25 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
     } else {
 
       # Text default for the APA Table
-      set_flextable_defaults(font.size = 10, font.family = 'Times')
+      flextable::set_flextable_defaults(font.size = 10, font.family = 'Times')
+
+      # Deprecated
+      #options('ReporteRs-fontsize' = 10, 'ReporteRs-default-font' = 'Times')
 
       # Define header properties
-      headerCellProps = ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "solid", border.left.style = "none", border.right.style = "none")
-      headerParProps = ReporteRs::parProperties()
+
+      # Deprecated
+      #headerCellProps = ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "solid", border.left.style = "none", border.right.style = "none")
+      #eaderParProps = ReporteRs::parProperties()
 
       # Create APA table
-      apa.table = ReporteRs::FlexTable(data, header.columns = FALSE, header.text.props = ReporteRs::textNormal(), header.par.props = ReporteRs::parCenter(), header.cell.props = headerCellProps)
-      apa.table[, 2:length(data)] = ReporteRs::parCenter()
+      apa.table = flextable::flextable(data)
+      apa.table = flextable::border_remove(x = apa.table)
+      apa.table = flextable::align(apa.table, j = 2:length(data), align = "center")
+
+      # Deprecated
+      #apa.table = ReporteRs::FlexTable(data, header.columns = FALSE, header.text.props = ReporteRs::textNormal(), header.par.props = ReporteRs::parCenter(), header.cell.props = headerCellProps)
+      #apa.table[, 2:length(data)] = ReporteRs::parCenter()
 
       colspan = c()
       merged = 0
@@ -360,9 +375,15 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
 
         if((length(signif) > 0 & signif[1] == j) | (length(script) > 0 & script[1] == j)) {
 
-          apa.table[, j] = ReporteRs::parRight()
-          apa.table[, j] = ReporteRs::chprop(ReporteRs::cellProperties(padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7, border.style = "none"))
-          apa.table[nrow(data), j] = ReporteRs::chprop(ReporteRs::cellProperties(padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
+          # Format all the data
+          apa.table = flextable::align(apa.table, j = j, align = "right")
+          apa.table = flextable::padding(apa.table, j = j, padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7)
+          apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border=flextable::fp_border())
+
+          # Deprecated
+          #apa.table[, j] = ReporteRs::parRight()
+          #apa.table[, j] = ReporteRs::chprop(ReporteRs::cellProperties(padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7, border.style = "none"))
+          #apa.table[nrow(data), j] = ReporteRs::chprop(ReporteRs::cellProperties(padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
 
           index = j + 1
           remove = index - merged
@@ -370,9 +391,15 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           colspan = c(colspan, 2)
           apa.header = apa.header[-remove]
 
-          apa.table[, index] = ReporteRs::parLeft()
-          apa.table[, index] = ReporteRs::chprop(ReporteRs::cellProperties( padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7, border.style = "none"))
-          apa.table[nrow(data), index] = ReporteRs::chprop(ReporteRs::cellProperties( padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
+          # Format the first column with variable names
+          apa.table = flextable::align(apa.table, j = index, align = "left")
+          pa.table = flextable::padding(apa.table, j = index, padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7)
+          apa.table = flextable::hline(apa.table, i = nrow(data), j = index, border=flextable::fp_border())
+          
+          # Deprecated
+          #apa.table[, index] = ReporteRs::parLeft()
+          #apa.table[, index] = ReporteRs::chprop(ReporteRs::cellProperties( padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7, border.style = "none"))
+          #apa.table[nrow(data), index] = ReporteRs::chprop(ReporteRs::cellProperties( padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
 
           merged = merged + 1
           skip = TRUE
@@ -381,7 +408,15 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
             signif = signif[-1]
           } else {
             script = script[-1]
-            apa.table[, index] = ReporteRs::textProperties(vertical.align = 'subscript')
+            
+            apa.table = flextable::comppose(
+              apa.table, j = index, value = flextable::as_paragraph(
+                flextable::as_sub(apa.table[, index]) 
+              ) 
+            )
+
+            # Deprecated
+            #apa.table[, index] = ReporteRs::textProperties(vertical.align = 'subscript')
           }
 
         } else {
@@ -390,8 +425,13 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
             skip = FALSE
           } else {
             colspan = c(colspan, 1)
-            apa.table[, j] = ReporteRs::chprop(ReporteRs::cellProperties( padding = 7, border.style = "none"))
-            apa.table[nrow(data), j] = ReporteRs::chprop(ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
+
+            apa.table = flextable::padding(apa.table, j = j, padding = 7)
+            apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border=flextable::fp_border())
+
+            # Deprecated
+            #apa.table[, j] = ReporteRs::chprop(ReporteRs::cellProperties( padding = 7, border.style = "none"))
+            #apa.table[nrow(data), j] = ReporteRs::chprop(ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "none", border.left.style = "none", border.right.style = "none"))
           }
 
         }
@@ -411,8 +451,10 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           return(list(succes = error))
         }
 
-        apa.table = ReporteRs::addHeaderRow(apa.table, value = level1.header, colspan = level1.colspan)
-        apa.table = ReporteRs::addHeaderRow(apa.table, value = apa.header, colspan = colspan)
+
+        # Deprecated
+        #apa.table = ReporteRs::addHeaderRow(apa.table, value = level1.header, colspan = level1.colspan)
+        #apa.table = ReporteRs::addHeaderRow(apa.table, value = apa.header, colspan = colspan)
 
         apa.table[1, 1:length(level2.header), to = 'header', side = 'bottom'] = ReporteRs::borderNone()
         apa.table[2, 1:length(level2.header), to = 'header', side = 'top'] = ReporteRs::borderNone()
