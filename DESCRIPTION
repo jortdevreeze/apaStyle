@@ -1,7 +1,7 @@
 Package: apaStyle
 Type: Package
 Title: Generate APA Tables for MS Word
-Version: 0.5
+Version: 0.6
 Date: 2017-03-29
 Author: Jort de Vreeze [aut, cre]
 Maintainer: Jort de Vreeze <j.devreeze@iwm-tuebingen.de>

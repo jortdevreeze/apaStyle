@@ -1,0 +1,14 @@
+version: '3'
+
+services:  
+  rstudio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rstudio
+    ports:
+      - 8787:8787
+    env_file:
+     - .env
+    volumes:
+      - .:/home/rstudio
