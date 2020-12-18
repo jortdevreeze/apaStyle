@@ -311,9 +311,11 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
     }
 
     # Create a user defined footnote
-    if(!is.null(note) && save == TRUE) {
-      apa.note = ReporteRs::pot("Note. ", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
-        ReporteRs::pot(note, ReporteRs::textProperties(font.family = "Times", font.size = 12))
+    if(!is.null(note) && save == TRUE) {      
+      apa.note = officer::fpar( 
+        ftext("Note. ", prop=fp_text(font.family = "Times", font.size = 12, italic=T)), 
+        ftext(note, prop=fp_text(font.family = "Times", font.size = 12)) 
+      )
     } else {
       apa.note = ""
     }
@@ -340,7 +342,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
     } else {
 
       # Text default for the APA Table
-      options('ReporteRs-fontsize' = 10, 'ReporteRs-default-font' = 'Times')
+      set_flextable_defaults(font.size = 10, font.family = 'Times')
 
       # Define header properties
       headerCellProps = ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "solid", border.left.style = "none", border.right.style = "none")
