@@ -4,8 +4,8 @@
 #' @param data Dataset with statistics.
 #' @return \code{apa.signif} object; a list consisting of
 #' \item{succes}{message in case of an error}
-#' \item{signif}{\code{pot {ReporteRs}} object}
-#' @importFrom "ReporteRs" "textProperties" "pot"
+#' \item{signif}{\code{block_list {officer}} object}
+#' @importFrom "officer" "block_list" "fpar" "ftext" "fp_text"
 #' @export
 #'
 #' @examples
@@ -28,8 +28,8 @@ apa.signif = function(data=data.frame()) UseMethod("apa.signif")
 #' @param data Dataset with statistics.
 #' @return \code{apa.signif} object; a list consisting of
 #' \item{succes}{message in case of an error}
-#' \item{signif}{\code{pot {ReporteRs}} object}
-#' @importFrom "ReporteRs" "textProperties" "pot"
+#' \item{signif}{\code{block_list {officer}} object}
+#' @importFrom "officer" "block_list" "fpar" "ftext" "fp_text"
 #' @export
 #'
 #' @examples
@@ -100,40 +100,92 @@ apaStyleSignificance = function(data) {
     has.signif4 = apply(data, c(1, 2), function(x) any(x == "***"))
 
     if (TRUE %in% has.signif1) {
-      sig1 = ReporteRs::pot("\u2020", ReporteRs::textProperties(font.family = "Times", font.size = 12, vertical.align = "superscript")) +
-        ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
-        ReporteRs::pot(" < .10", ReporteRs::textProperties(font.family = "Times", font.size = 12))
+      sig1 = officer::block_list(
+        officer::fpar( 
+          officer::ftext("\u2020", prop=officer::fp_text(font.family = "Times", font.size = 12, vertical.align = "superscript")), 
+          officer::ftext("p", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
+          officer::ftext(" < .10", prop=officer::fp_text(font.family = "Times", font.size = 12)) 
+        )
+      )
+      # Deprecated
+      #sig1 = ReporteRs::pot("\u2020", ReporteRs::textProperties(font.family = "Times", font.size = 12, vertical.align = "superscript")) +
+      #  ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
+      #  ReporteRs::pot(" < .10", ReporteRs::textProperties(font.family = "Times", font.size = 12))
     } else {
-      sig1 = ReporteRs::pot("")
+      sig1 = officer::block_list(officer::fpar(officer::ftext("")))
+      # Deprecated
+      #sig1 = ReporteRs::pot("")
     }
 
     if ((TRUE %in% has.signif2) || (TRUE %in% has.signif3 || TRUE %in% has.signif4)) {
-      if(!"" %in% sig1[[1]]$value) { sig1 = sig1 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) }
-      sig2 = ReporteRs::pot("*", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
-        ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
-        ReporteRs::pot(" < .05", ReporteRs::textProperties(font.family = "Times", font.size = 12))
+      if(!"" %in% sig1[[1]]$value) {
+        sig1 = officer::block_list(sig1, officer::fpar(officer::ftext("; ", prop=officer::fp_text(font.family = "Times", font.size = 12))))
+        # Deprecated
+        #sig1 = sig1 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) 
+      }
+      sig2 = officer::block_list(
+        officer::fpar( 
+          officer::ftext("*", prop=officer::fp_text(font.family = "Times", font.size = 12)), 
+          officer::ftext("p", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
+          officer::ftext(" < .05", prop=officer::fp_text(font.family = "Times", font.size = 12)) 
+        )
+      )
+      # Deprecated
+      #sig2 = ReporteRs::pot("*", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
+      #  ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
+      #  ReporteRs::pot(" < .05", ReporteRs::textProperties(font.family = "Times", font.size = 12))
     } else {
-      sig2 = ReporteRs::pot("")
+      sig2 = officer::block_list(officer::fpar(officer::ftext("")))
+      # Deprecated
+      #sig2 = ReporteRs::pot("")
     }
 
     if ((TRUE %in% has.signif3) || (TRUE %in% has.signif4)) {
-      if(!"" %in% sig2[[1]]$value) { sig2 = sig2 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) }
-      sig3 = ReporteRs::pot("**", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
-        ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
-        ReporteRs::pot(" < .01", ReporteRs::textProperties(font.family = "Times", font.size = 12))
+      if(!"" %in% sig2[[1]]$value) {
+        sig2 = officer::block_list(sig2, officer::fpar(officer::ftext("; ", prop=officer::fp_text(font.family = "Times", font.size = 12))))
+        # Deprecated
+        #sig2 = sig2 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) 
+      }
+      sig3 = officer::block_list(
+        officer::fpar( 
+          officer::ftext("**", prop=officer::fp_text(font.family = "Times", font.size = 12)), 
+          officer::ftext("p", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
+          officer::ftext(" < .01", prop=officer::fp_text(font.family = "Times", font.size = 12)) 
+        )
+      )
+      # Deprecated
+      #sig3 = ReporteRs::pot("**", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
+      #  ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
+      #  ReporteRs::pot(" < .01", ReporteRs::textProperties(font.family = "Times", font.size = 12))
     } else {
-      sig3 = ReporteRs::pot("")
+      sig3 = officer::block_list(officer::fpar(officer::ftext("")))
+      # Deprecated
+      #sig3 = ReporteRs::pot("")
     }
 
     if (TRUE %in% has.signif4) {
-      if(!"" %in% sig3[[1]]$value) { sig3 = sig3 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) }
-      sig4 = ReporteRs::pot("***", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
-        ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
-        ReporteRs::pot(" < .001", ReporteRs::textProperties(font.family = "Times", font.size = 12))
+      if(!"" %in% sig3[[1]]$value) {
+        sig3 = officer::block_list(sig3, officer::fpar(officer::ftext("; ", prop=officer::fp_text(font.family = "Times", font.size = 12))))
+        # Deprecated
+        #sig3 = sig3 + ReporteRs::pot("; ", ReporteRs::textProperties(font.family = "Times", font.size = 12)) 
+      }
+      signif4 = officer::block_list(
+        officer::fpar( 
+          officer::ftext("***", prop=officer::fp_text(font.family = "Times", font.size = 12)), 
+          officer::ftext("p", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
+          officer::ftext(" < .001", prop=officer::fp_text(font.family = "Times", font.size = 12)) 
+        )
+      )
+      # Deprecated
+      #sig4 = ReporteRs::pot("***", ReporteRs::textProperties(font.family = "Times", font.size = 12)) +
+      #  ReporteRs::pot("p", ReporteRs::textProperties(font.family = "Times", font.size = 12, font.style = "italic")) +
+      #  ReporteRs::pot(" < .001", ReporteRs::textProperties(font.family = "Times", font.size = 12))
     } else {
-      sig4 = ReporteRs::pot("")
+      sig4 = officer::block_list(officer::fpar(officer::ftext("")))
+      # Deprecated
+      #sig4 = ReporteRs::pot("")
     }
-    apa.signif =  sig1 + sig2 + sig3 + sig4
+    apa.signif =  officer::block_list(sig1, sig2, sig3, sig4)
 
   }
 

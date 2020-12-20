@@ -31,8 +31,9 @@
 #' @return \code{apa.table} object; a list consisting of
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whether the document is saved}
-#' \item{table}{\code{FlexTable {ReporteRs}} object}
-#' @importFrom "ReporteRs" "docx" "writeDoc" "FlexTable" "addHeaderRow" "addSection" "addParagraph" "cellProperties" "parProperties" "textProperties" "pot" "chprop" "textNormal" "parLeft" "parRight" "parCenter"
+#' \item{table}{\code{flextable {flextable}} object}
+#' @importFrom "offcicer" "read_docx" "print" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text"
+#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "align" "padding" "italic" "hline" "fp_border" "comppose" "as_paragraph" "as_sub" "add_header_row"
 #' @importFrom "utils" "head"
 #' @export
 #'
@@ -102,8 +103,9 @@ apa.table = function(data=data.frame(), level1.header=NULL, level1.colspan=NULL,
 #' @return \code{apa.table} object; a list consisting of
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whether the document is saved}
-#' \item{table}{\code{FlexTable {ReporteRs}} object}
-#' @importFrom "ReporteRs" "docx" "writeDoc" "FlexTable" "addHeaderRow" "addSection" "addParagraph" "cellProperties" "parProperties" "textProperties" "pot" "chprop" "textNormal" "parLeft" "parRight" "parCenter"
+#' \item{table}{\code{flextable {flextable}} object}
+#' @importFrom "offcicer" "read_docx" "print" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text"
+#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "align" "padding" "italic" "hline" "fp_border" "comppose" "as_paragraph" "as_sub" "add_header_row"
 #' @importFrom "utils" "head"
 #' @export
 #'
@@ -356,10 +358,11 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
 
       # Deprecated
       #headerCellProps = ReporteRs::cellProperties(padding = 7, border.bottom.style = "solid", border.top.style = "solid", border.left.style = "none", border.right.style = "none")
-      #eaderParProps = ReporteRs::parProperties()
+      #headerParProps = ReporteRs::parProperties()
 
       # Create APA table
       apa.table = flextable::flextable(data)
+      apa.table = flextable::delete_part(x = apa.table, part = "header")
       apa.table = flextable::border_remove(x = apa.table)
       apa.table = flextable::align(apa.table, j = 2:length(data), align = "center")
 
@@ -378,7 +381,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           # Format all the data
           apa.table = flextable::align(apa.table, j = j, align = "right")
           apa.table = flextable::padding(apa.table, j = j, padding.right = 0, padding.left = 7, padding.top = 7, padding.bottom = 7)
-          apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border=flextable::fp_border())
+          apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border = flextable::fp_border())
 
           # Deprecated
           #apa.table[, j] = ReporteRs::parRight()
@@ -394,7 +397,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           # Format the first column with variable names
           apa.table = flextable::align(apa.table, j = index, align = "left")
           pa.table = flextable::padding(apa.table, j = index, padding.left = 0, padding.right = 7, padding.top = 7, padding.bottom = 7)
-          apa.table = flextable::hline(apa.table, i = nrow(data), j = index, border=flextable::fp_border())
+          apa.table = flextable::hline(apa.table, i = nrow(data), j = index, border = flextable::fp_border())
           
           # Deprecated
           #apa.table[, index] = ReporteRs::parLeft()
@@ -408,7 +411,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
             signif = signif[-1]
           } else {
             script = script[-1]
-            
+
             apa.table = flextable::comppose(
               apa.table, j = index, value = flextable::as_paragraph(
                 flextable::as_sub(apa.table[, index]) 
@@ -427,7 +430,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
             colspan = c(colspan, 1)
 
             apa.table = flextable::padding(apa.table, j = j, padding = 7)
-            apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border=flextable::fp_border())
+            apa.table = flextable::hline(apa.table, i = nrow(data), j = j, border = flextable::fp_border())
 
             # Deprecated
             #apa.table[, j] = ReporteRs::chprop(ReporteRs::cellProperties( padding = 7, border.style = "none"))
@@ -451,56 +454,89 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           return(list(succes = error))
         }
 
+        apa.table = flextable::add_header_row(apa.table, values = level1.header, colwidths = level1.colspan)
+        apa.table = flextable::add_header_row(apa.table, values = apa.header, colwidths = colspan)
 
         # Deprecated
         #apa.table = ReporteRs::addHeaderRow(apa.table, value = level1.header, colspan = level1.colspan)
         #apa.table = ReporteRs::addHeaderRow(apa.table, value = apa.header, colspan = colspan)
 
-        apa.table[1, 1:length(level2.header), to = 'header', side = 'bottom'] = ReporteRs::borderNone()
-        apa.table[2, 1:length(level2.header), to = 'header', side = 'top'] = ReporteRs::borderNone()
+        #apa.table[1, 1:length(level2.header), to = 'header', side = 'bottom'] = ReporteRs::borderNone()
+        #apa.table[2, 1:length(level2.header), to = 'header', side = 'top'] = ReporteRs::borderNone()
 
-        borders = sapply(grep("\\w", level1.header, perl = TRUE), function(x) sum(level1.colspan[1:x-1])+1)
-        catch = sapply(borders, function(x) apa.table[1, borders, to = 'header', side = 'bottom'] = ReporteRs::borderProperties(width = 1, style = 'solid'))
+        borders = sapply(grep("\\w", level1.header, perl = TRUE), function(x) sum(level1.colspan[1:x-1])+1)        
+        void = sapply(borders, function(x) apa.table = flextable::hline(apa.table, i = 1, j = borders, border = flextable::fp_border(), part = "header")
+
+        # Deprecated
+        #catch = sapply(borders, function(x) apa.table[1, borders, to = 'header', side = 'bottom'] = ReporteRs::borderProperties(width = 1, style = 'solid'))
 
       } else {
-        apa.table = ReporteRs::addHeaderRow(apa.table, value = apa.header, colspan = colspan)
+        apa.table = flextable::add_header_row(apa.table, values = apa.header, colwidths = colspan)
+
+        # Deprecated
+        #apa.table = ReporteRs::addHeaderRow(apa.table, value = apa.header, colspan = colspan)
       }
 
-      apa.table[, 1, to = 'header'] = ReporteRs::parLeft()
+      apa.table = flextable::align(apa.table, j = 1, align = "left", part = "header")
+      
+      # Deprecated
+      #apa.table[, 1, to = 'header'] = ReporteRs::parLeft()
 
       # Put APA reserved abbreviations in italic
-      for(i in 1:length(header)) {
-        if(is.element(header[i], apa.italics)) {
+      for(j in 1:length(header)) {
+        if(is.element(header[j], apa.italics)) {
           row = ifelse(level2 == TRUE, 2, 1)
-          apa.table[row, i, to = 'header'] = ReporteRs::textProperties(font.style = 'italic')
+          apa.table = flextable::italic(apa.table, i = row, j = j, part = "header")
+
+          # Deprecated
+          #apa.table[row, i, to = 'header'] = ReporteRs::textProperties(font.style = 'italic')
         }
       }
 
       if (save == TRUE) {
 
         # Generate MS Word document
-        apa.doc = ReporteRs::docx(title = title)
+        apa.doc = read_docx()
+
+        # Deprecated
+        #apa.doc = ReporteRs::docx(title = title)
 
         if(landscape == TRUE) {
-          apa.doc = ReporteRs::addSection(apa.doc, landscape = landscape)
+          # Deprecated
+          #apa.doc = ReporteRs::addSection(apa.doc, landscape = landscape)
         }
 
         # Add content to word document
-        apa.doc = ReporteRs::addParagraph(apa.doc, ReporteRs::pot(apa.tableName, ReporteRs::textProperties(font.family="Times", font.size=12)), stylename = "Normal")
-        apa.doc = ReporteRs::addParagraph(apa.doc, ReporteRs::pot(title, ReporteRs::textProperties(font.family="Times", font.size=12, font.style="italic")), stylename = "Normal")
-        apa.doc = ReporteRs::addFlexTable(apa.doc, apa.table)
+        apa.title = officer::fpar( 
+          officer::ftext(apa.tableName, prop=officer::fp_text(font.family = "Times", font.size = 12)), 
+          officer::ftext(title, prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)) 
+        )
+        apa.doc = officer::body_add_fpar(apa.doc, apa.title)
+        apa.doc = flextable::body_add_flextable(apa.doc, value = apa.table)
+
+        # Deprecated
+        #apa.doc = ReporteRs::addParagraph(apa.doc, ReporteRs::pot(apa.tableName, ReporteRs::textProperties(font.family="Times", font.size=12)), stylename = "Normal")
+        #apa.doc = ReporteRs::addParagraph(apa.doc, ReporteRs::pot(title, ReporteRs::textProperties(font.family="Times", font.size=12, font.style="italic")), stylename = "Normal")
+        #apa.doc = ReporteRs::addFlexTable(apa.doc, apa.table)
 
         # Add table footers
-        if(!is.null(apa.signif)) {
-          apa.doc = ReporteRs::addParagraph(apa.doc, apa.signif, stylename = "Normal")
+        if(!is.null(apa.note)) {
+          apa.doc = officer::body_add_fpar(apa.doc, apa.note)
+          # Deprecated
+          #apa.doc = ReporteRs::addParagraph(apa.doc, apa.note, stylename = "Normal")
         }
 
-        if(!is.null(apa.note)) {
-          apa.doc = ReporteRs::addParagraph(apa.doc, apa.note, stylename = "Normal")
+        if(!is.null(apa.signif)) {
+          apa.doc = officer::body_add_fpar(apa.doc, apa.signife)
+          # Deprecated
+          #apa.doc = ReporteRs::addParagraph(apa.doc, apa.signif, stylename = "Normal")
         }
 
         if(landscape == TRUE) {
-          apa.doc = ReporteRs::addSection(apa.doc)
+          apa.doc = officer::body_end_section_landscape(apa.doc)
+
+          # Deprecated
+          #apa.doc = ReporteRs::addSection(apa.doc)
         }
 
         if (file.exists(apa.filename)) {
@@ -511,7 +547,10 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           }
         }
 
-        ReporteRs::writeDoc(apa.doc, apa.filename)
+        officer::print(apa.doc, apa.filename)
+        
+        # Deprecated
+        #ReporteRs::writeDoc(apa.doc, apa.filename)
 
       }
 
