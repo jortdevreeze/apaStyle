@@ -527,7 +527,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
         }
 
         if(!is.null(apa.signif)) {
-          apa.doc = officer::body_add_fpar(apa.doc, apa.signife)
+          apa.doc = officer::body_add_blocks(apa.doc, apa.signif)
           # Deprecated
           #apa.doc = ReporteRs::addParagraph(apa.doc, apa.signif, stylename = "Normal")
         }
