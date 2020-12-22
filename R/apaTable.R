@@ -455,20 +455,30 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
         }
       }
 
-      #apa.table =  flextable::autofit(apa.table)
-
+      # Apply autofit differently for complex tables
+      if (level2 == TRUE) {
+        apa.table =  flextable::autofit(apa.table, part = "body")
+      } else {
+        apa.table =  flextable::autofit(apa.table)
+      }
+      
       if (save == TRUE) {
 
         # Generate MS Word document
         apa.doc = read_docx()
 
         # Add content to word document
+        apa.name = officer::fpar( 
+          officer::ftext(apa.tableName, prop=officer::fp_text(font.family = "Times", font.size = 12))
+        )
+
         apa.title = officer::fpar( 
-          officer::ftext(apa.tableName, prop=officer::fp_text(font.family = "Times", font.size = 12)), 
           officer::ftext(title, prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)) 
         )
+
+        apa.doc = officer::body_add(apa.doc, apa.name)
         apa.doc = officer::body_add(apa.doc, apa.title)
-        apa.doc = flextable::body_add_flextable(apa.doc, value = apa.table)
+        apa.doc = flextable::body_add_flextable(apa.doc, value = apa.table, align = "left")
 
         # Add table footers
         if(!is.null(apa.note)) {
@@ -476,7 +486,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
         }
 
         if(!is.null(apa.signif)) {
-          apa.doc = officer::body_add_blocks(apa.doc, apa.signif)
+          apa.doc = officer::body_add(apa.doc, apa.signif)
         }
 
         if(landscape == TRUE) {

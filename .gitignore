@@ -1,8 +1,9 @@
 /.*/*
+/man/*.default.Rd
+/man/print.*.Rd
 TRUE
 R.Rproj
 .Rhistory
 .Rbuildignore
-.Rproj.user
 .env
-.docx
+*.docx
