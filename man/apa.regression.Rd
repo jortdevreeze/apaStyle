@@ -4,9 +4,17 @@
 \alias{apa.regression}
 \title{Generic method to generate an APA style table with regression parameters for MS Word.}
 \usage{
-apa.regression(..., variables = NULL, number = "XX", title = "APA Table",
-  filename = "APA Table.docx", note = NULL, landscape = FALSE,
-  save = TRUE, type = "wide")
+apa.regression(
+  ...,
+  variables = NULL,
+  number = "XX",
+  title = "APA Table",
+  filename = "APA Table.docx",
+  note = NULL,
+  landscape = FALSE,
+  save = TRUE,
+  type = "wide"
+)
 }
 \arguments{
 \item{...}{Regression (i.e., lm) result objects.}
@@ -37,4 +45,3 @@ apa.regression(..., variables = NULL, number = "XX", title = "APA Table",
 \description{
 Generic method to generate an APA style table with regression parameters for MS Word.
 }
-

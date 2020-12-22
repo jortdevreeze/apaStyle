@@ -4,10 +4,18 @@
 \alias{apa.table}
 \title{Generic method to generate an APA style table for MS Word}
 \usage{
-apa.table(data = data.frame(), level1.header = NULL,
-  level1.colspan = NULL, level2.header = NULL, number = "XX",
-  title = "APA Table", filename = "APA Table.docx", note = NULL,
-  landscape = FALSE, save = TRUE)
+apa.table(
+  data = data.frame(),
+  level1.header = NULL,
+  level1.colspan = NULL,
+  level2.header = NULL,
+  number = "XX",
+  title = "APA Table",
+  filename = "APA Table.docx",
+  note = NULL,
+  landscape = FALSE,
+  save = TRUE
+)
 }
 \arguments{
 \item{data}{Dataset with statistics.}
@@ -34,7 +42,7 @@ apa.table(data = data.frame(), level1.header = NULL,
 \code{apa.table} object; a list consisting of
 \item{succes}{message in case of an error}
 \item{save}{flag which indicates whether the document is saved}
-\item{table}{\code{FlexTable {ReporteRs}} object}
+\item{table}{\code{flextable {flextable}} object}
 }
 \description{
 Generic method to generate an APA style table for MS Word
@@ -86,4 +94,3 @@ apa.table(
   level2.header = c("Variable", "M", "SD", "t-value", "*")
 )$table
 }
-

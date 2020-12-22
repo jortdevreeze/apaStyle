@@ -12,7 +12,7 @@ apa.signif(data = data.frame())
 \value{
 \code{apa.signif} object; a list consisting of
 \item{succes}{message in case of an error}
-\item{signif}{\code{pot {ReporteRs}} object}
+\item{signif}{\code{block_list {officer}} object}
 }
 \description{
 Generic method to make a footnote indicating significant values.
@@ -29,4 +29,3 @@ example <- data.frame(
 # Use apa.descriptives function
 apa.signif(data = example)
 }
-

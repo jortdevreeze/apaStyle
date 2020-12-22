@@ -1,7 +1,8 @@
 /.*/*
-/R/R.Rproj
+TRUE
+R.Rproj
 .Rhistory
+.Rbuildignore
 .Rproj.user
 .env
 .docx
-TRUE

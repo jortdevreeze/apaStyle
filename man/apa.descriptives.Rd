@@ -4,10 +4,19 @@
 \alias{apa.descriptives}
 \title{Generic method to generate an APA style table with descriptives for MS Word.}
 \usage{
-apa.descriptives(data = data.frame(), variables = NULL, report = "",
-  title = "APA Table", filename = "APA Table.docx", note = NULL,
-  position = "lower", merge = FALSE, sig = TRUE, landscape = FALSE,
-  save = TRUE)
+apa.descriptives(
+  data = data.frame(),
+  variables = NULL,
+  report = "",
+  title = "APA Table",
+  filename = "APA Table.docx",
+  note = NULL,
+  position = "lower",
+  merge = FALSE,
+  sig = TRUE,
+  landscape = FALSE,
+  save = TRUE
+)
 }
 \arguments{
 \item{data}{Raw dataset with variables.}
@@ -65,4 +74,3 @@ apa.descriptives(
   variables = c("Column 1", "Column 2", "Column 3", "Column 4")
 )
 }
-

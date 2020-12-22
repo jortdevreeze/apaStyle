@@ -27,4 +27,3 @@ Generic method to merge two vectors and create a header
 # Use apa.merge function
 apa.merge(a = rnorm(100, mean = 0, sd = 1), b = rnorm(100, mean = 0, sd = 1), header = c("M", "SD"))
 }
-

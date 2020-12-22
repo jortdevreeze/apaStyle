@@ -32,8 +32,8 @@
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whether the document is saved}
 #' \item{table}{\code{flextable {flextable}} object}
-#' @importFrom "offcicer" "read_docx" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text" "fp_border"
-#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "width" "align" "padding" "italic" "hline" "comppose" "as_paragraph" "as_sub" "add_header_row"
+#' @importFrom "officer" "read_docx" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text" "fp_border"
+#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "width" "align" "padding" "italic" "hline" "compose" "as_paragraph" "as_sub" "add_header_row"
 #' @importFrom "utils" "head"
 #' @export
 #'
@@ -104,8 +104,8 @@ apa.table = function(data=data.frame(), level1.header=NULL, level1.colspan=NULL,
 #' \item{succes}{message in case of an error}
 #' \item{save}{flag which indicates whether the document is saved}
 #' \item{table}{\code{flextable {flextable}} object}
-#' @importFrom "offcicer" "read_docx" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text" "fp_border"
-#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "width" "align" "padding" "italic" "hline" "comppose" "as_paragraph" "as_sub" "add_header_row"
+#' @importFrom "officer" "read_docx" "body_end_section_landscape" "body_add_fpar" "fpar" "ftext" "fp_text" "fp_border"
+#' @importFrom "flextable" "set_flextable_defaults" "flextable" "body_add_flextable" "delete_part" "border_remove" "width" "align" "padding" "italic" "hline" "compose" "as_paragraph" "as_sub" "add_header_row"
 #' @importFrom "utils" "head"
 #' @export
 #'
@@ -392,7 +392,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
           } else {
             script = script[-1]
 
-            apa.table = flextable::comppose(
+            apa.table = flextable::compose(
               apa.table, j = index, value = flextable::as_paragraph(
                 flextable::as_sub(apa.table[, index]) 
               ) 
