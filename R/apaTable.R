@@ -315,8 +315,8 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
     # Create a user defined footnote
     if(!is.null(note) && save == TRUE) {      
       apa.note = officer::fpar( 
-        officer::ftext("Note. ", prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)), 
-        officer::ftext(note, prop=officer::fp_text(font.family = "Times", font.size = 12)) 
+        officer::ftext("Note. ", prop = officer::fp_text(font.family = "Times", font.size = 12, italic = TRUE)), 
+        officer::ftext(note, prop = officer::fp_text(font.family = "Times", font.size = 12)) 
       )
 
     } else {
@@ -469,11 +469,11 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
 
         # Add content to word document
         apa.name = officer::fpar( 
-          officer::ftext(apa.tableName, prop=officer::fp_text(font.family = "Times", font.size = 12))
+          officer::ftext(apa.tableName, prop = officer::fp_text(font.family = "Times", font.size = 12))
         )
 
         apa.title = officer::fpar( 
-          officer::ftext(title, prop=officer::fp_text(font.family = "Times", font.size = 12, italic=T)) 
+          officer::ftext(title, prop = officer::fp_text(font.family = "Times", font.size = 12, italic = TRUE)) 
         )
 
         apa.doc = officer::body_add(apa.doc, apa.name)

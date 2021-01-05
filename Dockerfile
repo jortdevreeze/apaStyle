@@ -5,6 +5,9 @@ RUN apt-get update \
     libxml2 \
     git
 
+RUN install2.r devtools
+
 COPY ./requirements.txt .
-RUN cat requirements.txt | xargs install2.r --error \
-    --deps TRUE
+COPY ./install-package.r .
+
+RUN Rscript install-package.r requirements.txt

@@ -100,60 +100,52 @@ apaStyleSignificance = function(data) {
     has.signif4 = apply(data, c(1, 2), function(x) any(x == "***"))
     
     style_normal = officer::fp_text(font.family = "Times", font.size = 12)
-    style_italic = officer::fp_text(font.family = "Times", font.size = 12, italic=T)
+    style_italic = officer::fp_text(font.family = "Times", font.size = 12, italic = TRUE)
     style_dagger = officer::fp_text(font.family = "Times", font.size = 12, vertical.align = "superscript")
 
+    signif = c()
+
     if (TRUE %in% has.signif1) {
-      sig1 = officer::fpar( 
-        officer::ftext("\u2020", prop = style_dagger), 
+      signif = c(signif, 
+        officer::ftext("\u2020", prop = style_dagger),
         officer::ftext("p", prop = style_italic), 
         officer::ftext(" < .10", prop = style_normal) 
       )
-    } else {
-      sig1 = officer::fpar(officer::ftext("", prop = style_normal))
     }
 
     if ((TRUE %in% has.signif2) || (TRUE %in% has.signif3 || TRUE %in% has.signif4)) {
       if(!"" %in% sig1[[1]]$value) {
-        sig1 = officer::fpar(sig1, officer::ftext("; ", prop = style_normal))
+        signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
-      sig2 = officer::fpar( 
+      signif = c(signif,
         officer::ftext("*", prop = style_normal), 
         officer::ftext("p", prop = style_italic), 
         officer::ftext(" < .05", prop = style_normal) 
       )
-
-    } else {
-      sig2 = officer::fpar(officer::ftext("", prop = style_normal))
     }
 
     if ((TRUE %in% has.signif3) || (TRUE %in% has.signif4)) {
       if(!"" %in% sig2[[1]]$value) {
-        sig2 = officer::fpar(sig2, officer::ftext("; ", prop = style_normal))
+        signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
-      sig3 = officer::fpar( 
+      signif = c(signif,
         officer::ftext("**", prop = style_normal), 
         officer::ftext("p", prop = style_italic), 
         officer::ftext(" < .01", prop = style_normal) 
       )
-    } else {
-      sig3 = officer::fpar(officer::ftext("", prop = style_normal))
     }
 
     if (TRUE %in% has.signif4) {
       if(!"" %in% sig3[[1]]$value) {
-        sig3 = officer::fpar(sig3, officer::ftext("; ", prop = style_normal))
+        signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
-      sig4 = officer::fpar( 
+      signif = c(signif,
         officer::ftext("***", prop = style_normal), 
         officer::ftext("p", prop = style_italic), 
         officer::ftext(" < .001", prop = style_normal) 
       )
-    } else {
-      sig4 = officer::fpar(officer::ftext("", prop = style_normal))
-    }
-    apa.signif =  officer::fpar(sig1, sig2, sig3, sig4)
-    apa.signif =  ""
+
+    apa.signif = officer::fpar(signif)
 
   }
 
