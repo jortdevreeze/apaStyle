@@ -143,7 +143,8 @@ apaStyleSignificance = function(data) {
         officer::ftext("***", prop = style_normal), 
         officer::ftext("p", prop = style_italic), 
         officer::ftext(" < .001", prop = style_normal) 
-      )
+      )    
+    }
 
     apa.signif = officer::fpar(signif)
 
