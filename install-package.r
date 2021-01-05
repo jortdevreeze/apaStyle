@@ -20,22 +20,19 @@ install.packages2 = function(pkg, tag = NULL) {
     }
 }
 
-print('Installing dependencies:')
+if (file.info(args[1])$size != 0) {
 
-requirements <- read.table2(args[1])
-requirements[] <- lapply(requirements, as.character)
+  print('Installing dependencies:')
 
-print(requirements[,1])
+  requirements <- read.table2(args[1])
+  requirements[] <- lapply(requirements, as.character)
 
-pkg1 <- subset(requirements, (!is.na(requirements[,2])) & (requirements[,2] != ''))
-mapply(install.packages2, pkg1[,1], pkg1[,2])
+  print(requirements[,1])
 
-pkg2 <- subset(requirements, (is.na(requirements[,2])) | (requirements[,2] == ''))
-mapply(install.packages2, pkg2[,1])
+  pkg1 <- subset(requirements, (!is.na(requirements[,2])) & (requirements[,2] != ''))
+  mapply(install.packages2, pkg1[,1], pkg1[,2])
 
-
-
-
-
-
-
+  pkg2 <- subset(requirements, (is.na(requirements[,2])) | (requirements[,2] == ''))
+  mapply(install.packages2, pkg2[,1])
+  
+}
