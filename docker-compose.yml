@@ -11,5 +11,4 @@ services:
     env_file:
      - .env
     volumes:
-      - .:/home/rstudio
-      - ./base:/home
+      - ./src:/home/rstudio
