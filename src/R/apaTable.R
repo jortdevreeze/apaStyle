@@ -224,7 +224,7 @@ apaStyleTable = function(data, level1.header, level1.colspan, level2.header, num
 
   # Check the size of the dataset
   if (ncol(data) > 22 | nrow(data) > 100) {
-    error = "The supplied data is too big to generate an APA formatted table."
+    error = cat("The supplied data is too big to generate an APA formatted table (ncol: ", ncol(data), ", nrow: ", nrow(data))
     warning(error)
     return(list(succes = error))
   } else {
