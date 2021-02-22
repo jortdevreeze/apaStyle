@@ -80,75 +80,68 @@ apaStyleSignificance = function(data) {
     return(list(succes = error))
   }
 
-  # Check the size of the dataset
-  if (ncol(data) > 22 | nrow(data) > 100) {
-    error = "The supplied data is too big to generate an APA formatted table."
-    warning(error)
-    return(list(succes = error))
-  } else {
+  # Convert factors to characters
+  i = sapply(data, is.factor)
+  data[i] = lapply(data[i], as.character)
 
-    # Convert factors to characters
-    i = sapply(data, is.factor)
-    data[i] = lapply(data[i], as.character)
+  # Convert "+" symbol to unicode dagger symbol
+  data[which(data == "+", arr.ind = TRUE)] = "\u2020"
 
-    # Convert "+" symbol to unicode dagger symbol
-    data[which(data == "+", arr.ind = TRUE)] = "\u2020"
+  has.signif1 = apply(data, c(1, 2), function(x) any(x == "\u2020"))
+  has.signif2 = apply(data, c(1, 2), function(x) any(x == "*"))
+  has.signif3 = apply(data, c(1, 2), function(x) any(x == "**"))
+  has.signif4 = apply(data, c(1, 2), function(x) any(x == "***"))
+  
+  style_normal = officer::fp_text(font.family = "Times", font.size = 12)
+  style_italic = officer::fp_text(font.family = "Times", font.size = 12, italic = TRUE)
+  style_dagger = officer::fp_text(font.family = "Times", font.size = 12, vertical.align = "superscript")
 
-    has.signif1 = apply(data, c(1, 2), function(x) any(x == "\u2020"))
-    has.signif2 = apply(data, c(1, 2), function(x) any(x == "*"))
-    has.signif3 = apply(data, c(1, 2), function(x) any(x == "**"))
-    has.signif4 = apply(data, c(1, 2), function(x) any(x == "***"))
-    
-    style_normal = officer::fp_text(font.family = "Times", font.size = 12)
-    style_italic = officer::fp_text(font.family = "Times", font.size = 12, italic = TRUE)
-    style_dagger = officer::fp_text(font.family = "Times", font.size = 12, vertical.align = "superscript")
+  signif = c()
 
-    signif = c()
-
-    if (TRUE %in% has.signif1) {
-      signif = c(signif, 
-        officer::ftext("\u2020", prop = style_dagger),
-        officer::ftext("p", prop = style_italic), 
-        officer::ftext(" < .10", prop = style_normal) 
-      )
-    }
-
-    if ((TRUE %in% has.signif2) || (TRUE %in% has.signif3 || TRUE %in% has.signif4)) {
-      if(!"" %in% has.signif1[[1]]$value) {
-        signif = c(signif, officer::ftext("; ", prop = style_normal))
-      }
-      signif = c(signif,
-        officer::ftext("*", prop = style_normal), 
-        officer::ftext("p", prop = style_italic), 
-        officer::ftext(" < .05", prop = style_normal) 
-      )
-    }
-
-    if ((TRUE %in% has.signif3) || (TRUE %in% has.signif4)) {
-      if(!"" %in% has.signif2[[1]]$value) {
-        signif = c(signif, officer::ftext("; ", prop = style_normal))
-      }
-      signif = c(signif,
-        officer::ftext("**", prop = style_normal), 
-        officer::ftext("p", prop = style_italic), 
-        officer::ftext(" < .01", prop = style_normal) 
-      )
-    }
-
-    if (TRUE %in% has.signif4) {
-      if(!"" %in% has.signif3[[1]]$value) {
-        signif = c(signif, officer::ftext("; ", prop = style_normal))
-      }
-      signif = c(signif,
-        officer::ftext("***", prop = style_normal), 
-        officer::ftext("p", prop = style_italic), 
-        officer::ftext(" < .001", prop = style_normal) 
-      )    
-    }
-
-    apa.signif = officer::fpar(signif)
-
+  if (TRUE %in% has.signif1) {
+    signif = c(signif, 
+      officer::ftext("\u2020", prop = style_dagger),
+      officer::ftext("p", prop = style_italic), 
+      officer::ftext(" < .10", prop = style_normal) 
+    )
   }
+
+  if ((TRUE %in% has.signif2) || (TRUE %in% has.signif3 || TRUE %in% has.signif4)) {
+    if(!"" %in% has.signif1[[1]]$value) {
+      signif = c(signif, officer::ftext("; ", prop = style_normal))
+    }
+    signif = c(signif,
+      officer::ftext("*", prop = style_normal), 
+      officer::ftext("p", prop = style_italic), 
+      officer::ftext(" < .05", prop = style_normal) 
+    )
+  }
+
+  if ((TRUE %in% has.signif3) || (TRUE %in% has.signif4)) {
+    if(!"" %in% has.signif2[[1]]$value) {
+      signif = c(signif, officer::ftext("; ", prop = style_normal))
+    }
+    signif = c(signif,
+      officer::ftext("**", prop = style_normal), 
+      officer::ftext("p", prop = style_italic), 
+      officer::ftext(" < .01", prop = style_normal) 
+    )
+  }
+
+  if (TRUE %in% has.signif4) {
+    if(!"" %in% has.signif3[[1]]$value) {
+      signif = c(signif, officer::ftext("; ", prop = style_normal))
+    }
+    signif = c(signif,
+      officer::ftext("***", prop = style_normal), 
+      officer::ftext("p", prop = style_italic), 
+      officer::ftext(" < .001", prop = style_normal) 
+    )    
+  }
+
+  apa.signif = officer::fpar(signif)
+
+
 
   return(list(succes = TRUE, signif = apa.signif))
 
