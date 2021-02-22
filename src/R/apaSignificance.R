@@ -81,7 +81,7 @@ apaStyleSignificance = function(data) {
   }
 
   # Check the size of the dataset
-  if (ncol(data) > 20 | nrow(data) > 100) {
+  if (ncol(data) > 22 | nrow(data) > 100) {
     error = "The supplied data is too big to generate an APA formatted table."
     warning(error)
     return(list(succes = error))
