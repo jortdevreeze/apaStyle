@@ -114,7 +114,7 @@ apaStyleSignificance = function(data) {
     }
 
     if ((TRUE %in% has.signif2) || (TRUE %in% has.signif3 || TRUE %in% has.signif4)) {
-      if(!"" %in% signif1[[1]]$value) {
+      if(!"" %in% has.signif1[[1]]$value) {
         signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
       signif = c(signif,
@@ -125,7 +125,7 @@ apaStyleSignificance = function(data) {
     }
 
     if ((TRUE %in% has.signif3) || (TRUE %in% has.signif4)) {
-      if(!"" %in% signif2[[1]]$value) {
+      if(!"" %in% has.signif2[[1]]$value) {
         signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
       signif = c(signif,
@@ -136,7 +136,7 @@ apaStyleSignificance = function(data) {
     }
 
     if (TRUE %in% has.signif4) {
-      if(!"" %in% signif3[[1]]$value) {
+      if(!"" %in% has.signif3[[1]]$value) {
         signif = c(signif, officer::ftext("; ", prop = style_normal))
       }
       signif = c(signif,
